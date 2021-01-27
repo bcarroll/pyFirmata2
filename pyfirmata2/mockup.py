@@ -6,6 +6,12 @@ class MockupSerial(deque):
     """
     A Mockup object for python's Serial. Functions as a fifo-stack. Push to
     it with ``write``, read from it with ``read``.
+
+    :param port:
+    :type port: str
+    :param baudrate: baudrate of port
+    :type port: int
+    :param timeout: Default is 0.02
     """
 
     def __init__(self, port, baudrate, timeout=0.02):
@@ -31,6 +37,9 @@ class MockupSerial(deque):
     def write(self, value):
         """
         Appends bytes flat to the deque. So iterables will be unpacked.
+
+        :param value: value to write
+        :param type: byte
         """
         if hasattr(value, '__iter__'):
             bytearray(value)
@@ -47,7 +56,14 @@ class MockupSerial(deque):
 
 
 class MockupBoard(pyfirmata2.Board):
+    """
 
+    :param port:
+    :type port: str
+    :param layout:
+    :param values_dict: Default is {}
+    :type values_dict: dict
+    """
     def __init__(self, port, layout, values_dict={}):
         self.sp = MockupSerial(port, 57600)
         self.setup_layout(layout)

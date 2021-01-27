@@ -79,7 +79,19 @@ class NoInputWarning(RuntimeWarning):
 
 
 class Board(object):
-    """The Base class for any board."""
+    """The Base class for any board.
+
+        :param port: serial port the Arduino is connected to
+        :type port: str
+        :param layout: Defaults to None.
+        :param baudrate: serial port baudrate. Defaults to 57600.
+        :type baudrate: int
+        :param name: Defaults to None.
+        :type name: str
+        :param timeout: Defaults to None.
+        :type timeout: int
+        :raises Exception: If serial port is not available (can't connect)
+    """
     firmata_version = None
     firmware = None
     firmware_version = None
@@ -148,6 +160,10 @@ class Board(object):
         self.exit()
 
     def send_as_two_bytes(self, val):
+        """
+
+        :param val:
+        """
         self.sp.write(bytearray([val % 128, val >> 7]))
 
     def setup_layout(self, board_layout):
@@ -192,7 +208,12 @@ class Board(object):
         self.add_cmd_handler(REPORT_FIRMWARE, self._handle_report_firmware)
 
     def samplingOn(self, sample_interval=19):
-        # enables sampling
+        """Enable sampling
+
+            :param sample_interval: Frequency to sample analog port. Defaults to 19.
+            :type sample_interval: int (milliseconds)
+            :raises ValueError:
+        """
         if not self.samplerThread.running:
             if sample_interval < 10:
                 raise ValueError("Sampling interval less than 10ms")
@@ -200,7 +221,7 @@ class Board(object):
             self.samplerThread.start()
 
     def samplingOff(self):
-        # disables sampling
+        """Disable sampling"""
         if not self.samplerThread:
             return
         if self.samplerThread.running:
@@ -225,7 +246,10 @@ class Board(object):
             raise IOError("Board detection failed.")
 
     def add_cmd_handler(self, cmd, func):
-        """Adds a command handler for a command."""
+        """Adds a command handler for a command.
+        :param cmd: command
+        :param func: function
+        """
         len_args = len(inspect.getargspec(func)[0])
 
         def add_meta(f):
@@ -240,16 +264,24 @@ class Board(object):
     def get_pin(self, pin_def):
         """
         Returns the activated pin given by the pin definition.
-        May raise an ``InvalidPinDefError`` or a ``PinAlreadyTakenError``.
 
-        :arg pin_def: Pin definition as described below,
-            but without the arduino name. So for example ``a:1:i``.
+        :param pin_def: Pin definition.  Format is "<pinType>:<pinNumber>:<IOtype>"
 
-        'a' analog pin     Pin number   'i' for input
-        'd' digital pin    Pin number   'o' for output
-                                        'p' for pwm (Pulse-width modulation)
+            pinType:
+                'a' for analog pin\n
+                'd' for digital pin
 
-        All seperated by ``:``.
+            pinNumber:
+                Arduino GPIO pin number
+
+            IOType:
+                'i' for input\n
+                'o' for output\n
+                'p' for pwm (Pulse-width modulation)
+
+        :type pin_def: str
+        :example: ``a0 = board.get_pin('a:0:i')``
+        :raises: :class:`InvalidPinDefError`, :class:`PinAlreadyTakenError`
         """
         if type(pin_def) == list:
             bits = pin_def
@@ -292,8 +324,11 @@ class Board(object):
         """
         Sends a SysEx msg.
 
-        :arg sysex_cmd: A sysex command byte
-        : arg data: a bytearray of 7-bit bytes of arbitrary data
+        :param sysex_cmd: A sysex command byte
+        :type sysex_cmd: byte
+        :param data: a bytearray of 7-bit bytes of arbitrary data
+        :type data: bytearray
+
         """
         msg = bytearray([START_SYSEX, sysex_cmd])
         msg.extend(data)
@@ -348,15 +383,24 @@ class Board(object):
 
     def get_firmata_version(self):
         """
-        Returns a version tuple (major, minor) for the firmata firmware on the
-        board.
+        Get firmata firmware version
+
+        :return: version of the firmata firmware on the board.
+        :type: tuple (major, minor)
         """
         return self.firmata_version
 
     def servo_config(self, pin, min_pulse=544, max_pulse=2400, angle=0):
         """
         Configure a pin as servo with min_pulse, max_pulse and first angle.
+
         ``min_pulse`` and ``max_pulse`` default to the arduino defaults.
+
+        :param pin: GPIO pin Servo is attached to
+        :param min_pulse: Default is 544
+        :param max_pulse: Default is 2400
+        :param angle: Default is 0
+        :raises: :class:`IOError` if pin is not a valid servo pin
         """
         if pin > len(self.digital) or self.digital[pin].mode == UNAVAILABLE:
             raise IOError("Pin {0} is not a valid servo pin".format(pin))
@@ -437,7 +481,12 @@ class Board(object):
 
 
 class Port(object):
-    """An 8-bit port on the board."""
+    """An 8-bit port on the board.
+
+    :param board:
+    :param port_number:
+    :param num_pins: Default is 8
+    """
     def __init__(self, board, port_number, num_pins=8):
         self.board = board
         self.port_number = port_number
@@ -491,7 +540,13 @@ class Port(object):
 
 
 class Pin(object):
-    """A Pin representation"""
+    """A Pin representation
+
+    :param board:
+    :param pin_number:
+    :param type: Default is :class:`pyfirmata2.ANALOG`
+    :param port: Default is None
+    """
     def __init__(self, board, pin_number, type=ANALOG, port=None):
         self.board = board
         self.pin_number = pin_number
