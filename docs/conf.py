@@ -58,7 +58,7 @@ source_suffix = '.rst'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+#html_static_path = ['_static']
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
@@ -74,5 +74,5 @@ import sphinx_rtd_theme
 html_theme = 'sphinx_rtd_theme'
 
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
-sys.path.append(os.path.abspath('./'))
-sys.path.append(os.path.abspath('../'))
+sys.path.append(os.path.abspath('.'))
+sys.path.append(os.path.abspath('..'))

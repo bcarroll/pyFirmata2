@@ -1,20 +1,14 @@
-.. PyFirmata2 documentation master file, created by
-   sphinx-quickstart on Tue Jan 26 21:54:01 2021.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+.. module:: pyfirmata2
 
-Welcome to PyFirmata2's documentation!
-======================================
+PyFirmata2 documentation
+========================
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 4
+   pyfirmata2
 
+* :ref:`modindex`
 
-
-Indices and tables
-==================
+.. include:: ../README.rst
 
 * :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
