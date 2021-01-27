@@ -67,12 +67,12 @@ Usage
 =====
 
 
-Initialisation
+Initialization
 --------------
 
 Create an instance of the `Arduino` class::
 
-    from pyfirmata import Arduino
+    from pyfirmata2 import Arduino
     board = Arduino(Arduino.AUTODETECT)
 
 which automatically detects the serial port of the Arduino.
@@ -98,7 +98,7 @@ Calling `samplingOn()` without its argument sets
 the sampling interval to 19ms.
 
 
-Enabling and reading from analoge pins
+Enabling and reading from analog pins
 -------------------------------------------------
 
 To process data at a given sampling interval register a callback
