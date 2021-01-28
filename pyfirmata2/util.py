@@ -18,6 +18,12 @@ def get_the_board(layout=BOARDS['arduino'], base_dir='/dev/', identifier='tty.us
     ``base_dir`` and ``identifier`` are overridable as well. It will raise an
     IOError if it can't find a board, on a serial, or if it finds more than
     one.
+
+    :param layout:
+    :param base_dir: Default is '/dev/'
+    :type base_dir: str
+    :param identifier: Default is 'tty.usbserial'
+    :type identifier: str
     """
     from .pyfirmata2 import Board  # prevent a circular import
     boards = []
